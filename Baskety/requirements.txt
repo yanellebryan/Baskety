@@ -4,3 +4,4 @@ django_environ==0.13.0
 gunicorn
 whitenoise
 psycopg2-binary
+Pillow
