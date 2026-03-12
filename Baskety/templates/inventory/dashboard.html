@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 pb-12 font-sans">
+    <!-- Ultra-Modern Premium Header with Animated Gradient -->
+    <div class="sticky top-0 z-30 overflow-hidden">
+        <!-- Animated Gradient Background -->
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-violet-50/80 via-blue-50/60 to-cyan-50/80 animate-gradient-x">
+        </div>
+        <div class="absolute inset-0 backdrop-blur-2xl bg-white/70"></div>
+
+        <!-- Floating Border Effect -->
+        <div
+            class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200/60 to-transparent">
+        </div>
+
+        <!-- Content Container -->
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <!-- Left Section: Back Button + Title -->
+                <div class="flex items-center space-x-4">
+                    <!-- Premium Back Button with Glow -->
+                    <a href="{% url 'dashboard' %}"
+                        class="group relative flex items-center justify-center w-12 h-12 rounded-2xl bg-white/80 hover:bg-white backdrop-blur-sm text-gray-600 hover:text-gray-900 transition-all duration-500 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transform hover:scale-110 hover:-rotate-3 border border-white/50 overflow-hidden">
+                        <!-- Hover Gradient Effect -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-violet-50/0 group-hover:from-blue-50/50 group-hover:to-violet-50/50 transition-all duration-500">
+                        </div>
+                        <i data-lucide="arrow-left"
+                            class="relative w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1"></i>
+                    </a>
+
+                    <!-- Title Section with Animated Icon -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Floating Icon Container -->
+                        <div class="relative group/icon">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-blue-400 to-violet-500 rounded-2xl blur-lg opacity-40 group-hover/icon:opacity-60 transition-opacity duration-500">
+                            </div>
+                            <div
+                                class="relative p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-lg shadow-blue-200/50 transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500">
+                                <i data-lucide="package" class="w-7 h-7 text-white"></i>
+                            </div>
+                        </div>
+
+                        <!-- Title Text -->
+                        <div>
+                            <h1
+                                class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 tracking-tight leading-tight">
+                                Inventory Management
+                            </h1>
+                            <p class="text-sm text-gray-600 font-semibold mt-1 flex items-center">
+                                <span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+                                Manage stock and product catalog
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Section: Action Buttons -->
+                <div class="flex flex-wrap gap-3">
+                    <!-- Adjust Stock Button - Modern Glass Style -->
+                    <a href="{% url 'inventory:stock_adjustment' %}"
+                        class="group relative px-6 py-3.5 bg-white/80 backdrop-blur-sm border border-white/50 text-gray-700 font-bold rounded-2xl hover:bg-white shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-500 flex items-center transform hover:-translate-y-1 hover:scale-105 overflow-hidden">
+                        <!-- Animated Background Gradient -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-gray-50/0 via-gray-100/0 to-gray-50/0 group-hover:from-gray-50/80 group-hover:via-gray-100/80 group-hover:to-gray-50/80 transition-all duration-500">
+                        </div>
+
+                        <!-- Icon Container -->
+                        <div
+                            class="relative p-2 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 group-hover:from-gray-200 group-hover:to-gray-300 transition-all duration-300 mr-3 shadow-sm">
+                            <i data-lucide="refresh-cw"
+                                class="w-4 h-4 text-gray-700 group-hover:rotate-180 transition-transform duration-700"></i>
+                        </div>
+                        <span class="relative">Adjust Stock</span>
+                    </a>
+
+                    <!-- Add Product Button - Premium Gradient with Glow -->
+                    <a href="{% url 'products:product_add' %}"
+                        class="group relative px-7 py-3.5 bg-gradient-to-r from-[#4CAF50] via-[#48a84d] to-[#45a049] text-white font-bold rounded-2xl shadow-xl shadow-green-300/60 hover:shadow-2xl hover:shadow-green-400/70 transition-all duration-500 flex items-center transform hover:-translate-y-1.5 hover:scale-110 overflow-hidden">
+                        <!-- Animated Shine Effect -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
+                        </div>
+
+                        <!-- Pulsing Glow -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-green-400/0 via-green-300/0 to-green-400/0 group-hover:from-green-400/30 group-hover:via-green-300/30 group-hover:to-green-400/30 blur-xl transition-all duration-500">
+                        </div>
+
+                        <!-- Icon Container -->
+                        <div
+                            class="relative p-2 rounded-xl bg-white/20 group-hover:bg-white/30 backdrop-blur-sm transition-all duration-300 mr-3 shadow-lg group-hover:rotate-90 transform">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </div>
+                        <span class="relative font-extrabold tracking-wide">Add Product</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Animations -->
+    <style>
+        @keyframes gradient-x {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .animate-gradient-x {
+            background-size: 200% 200%;
+            animation: gradient-x 15s ease infinite;
+        }
+    </style>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Summary Cards (Floating with Lift) -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Total Products -->
+            <div
+                class="bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-50 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="package" class="w-12 h-12 text-blue-600"></i>
+                </div>
+                <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Products</div>
+                <div class="text-3xl font-extrabold text-gray-900">{{ total_products }}</div>
+            </div>
+
+            <!-- Total Stock Value -->
+            <div
+                class="bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-50 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="dollar-sign" class="w-12 h-12 text-green-600"></i>
+                </div>
+                <!-- Conditional styling to show premium value focus -->
+                <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Stock Value</div>
+                <div class="text-3xl font-extrabold text-[#4CAF50]">₱{{ total_stock_value }}</div>
+            </div>
+
+            <!-- Low Stock Items -->
+            <div
+                class="bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-50 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500"></i>
+                </div>
+                <div class="text-xs font-bold text-yellow-600 uppercase tracking-widest mb-1">Low Stock Items</div>
+                <div class="text-3xl font-extrabold text-gray-900">{{ low_stock_count }}</div>
+            </div>
+
+            <!-- Out of Stock -->
+            <div
+                class="bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-50 relative overflow-hidden group ring-1 ring-transparent hover:ring-red-100">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="x-circle" class="w-12 h-12 text-red-600"></i>
+                </div>
+                <div class="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">Out of Stock</div>
+                <div class="text-3xl font-extrabold text-red-600">{{ out_of_stock_count }}</div>
+            </div>
+        </div>
+
+        <!-- Stats & Filters (Floating Container) -->
+        <div class="bg-white p-6 rounded-3xl shadow-lg shadow-gray-100/50 mb-8 border border-gray-50">
+            <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                <i data-lucide="filter" class="w-5 h-5 mr-2 text-gray-400"></i> Search & Filters
+            </h2>
+            <form method="get" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400"></i>
+                    </div>
+                    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search by name or SKU..."
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition-all font-medium">
+                </div>
+                <div class="w-full md:w-56">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="tag" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <select name="category"
+                            class="w-full pl-9 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] appearance-none cursor-pointer font-medium text-gray-600">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                            {% if request.GET.category == category.id|stringformat:"s" %}
+                            <option value="{{ category.id }}" selected>
+                                {{ category.name }}
+                            </option>
+                            {% else %}
+                            <option value="{{ category.id }}">
+                                {{ category.name }}
+                            </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-56">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="activity" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <select name="status"
+                            class="w-full pl-9 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] appearance-none cursor-pointer font-medium text-gray-600">
+                            <option value="">All Statuses</option>
+                            <option value="in" {% if request.GET.status == 'in' %}selected{% endif %}>Healthy (In Stock)
+                            </option>
+                            <option value="low" {% if request.GET.status == 'low' %}selected{% endif %}>Low Stock</option>
+                            <option value="critical" {% if request.GET.status == 'critical' %}selected{% endif %}>Critical
+                                Stock</option>
+                            <option value="out" {% if request.GET.status == 'out' %}selected{% endif %}>Out of Stock
+                            </option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit"
+                    class="px-8 py-3 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-900 hover:shadow-lg transition-all flex items-center justify-center">
+                    Apply
+                </button>
+            </form>
+        </div>
+
+        <!-- Inventory Table (Modernized) -->
+        <div
+            class="bg-white shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] rounded-3xl overflow-hidden border border-gray-100">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-100">
+                    <thead class="bg-gray-50/80 backdrop-blur">
+                        <tr>
+                            <th class="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Product</th>
+                            <th class="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Category</th>
+                            <th class="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Stock</th>
+                            <th class="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Price</th>
+                            <th class="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Status</th>
+                            <th class="px-6 py-5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-50">
+                        {% for product in products %}
+                        <tr class="hover:bg-gray-50/50 transition-colors group">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    {% if product.image %}
+                                    <div class="h-10 w-10 flex-shrink-0">
+                                        <img class="h-10 w-10 rounded-lg object-cover ring-2 ring-gray-100"
+                                            src="{{ product.image.url }}">
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="h-10 w-10 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+                                        <i data-lucide="image" class="w-5 h-5"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div class="ml-4">
+                                        <div
+                                            class="text-sm font-bold text-gray-900 group-hover:text-[#4CAF50] transition-colors">
+                                            {{ product.name }}</div>
+                                        <div class="text-xs text-gray-500 sm:hidden">{{ product.sku }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <div class="p-1.5 bg-gray-100 rounded-md mr-2 text-gray-500">
+                                        <i data-lucide="{{ product.category.icon_name|default:'box' }}"
+                                            class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span class="font-medium">{{ product.category.name|default:"-" }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-bold text-gray-900">{{ product.current_stock }} <span
+                                        class="text-xs font-normal text-gray-400">units</span></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                                ₱{{ product.selling_price }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if product.stock_status == 'In Stock' %}
+                                <span
+                                    class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-green-50 text-green-700 border border-green-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 self-center"></span> In
+                                    Stock
+                                </span>
+                                {% elif product.stock_status == 'Low Stock' %}
+                                <span
+                                    class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-yellow-50 text-yellow-700 border border-yellow-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 mr-1.5 self-center"></span> Low
+                                    Stock
+                                </span>
+                                {% elif product.stock_status == 'Critical' %}
+                                <span
+                                    class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-red-50 text-red-700 border border-red-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 self-center"></span>
+                                    Critical
+                                </span>
+                                {% else %}
+                                <span
+                                    class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gray-100 text-gray-600 border border-gray-200">
+                                    Out of Stock
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="{% url 'products:product_edit' product.pk %}"
+                                    class="text-gray-400 hover:text-[#4CAF50] transition-colors p-2 rounded-full hover:bg-green-50 inline-block">
+                                    <i data-lucide="edit-3" class="w-5 h-5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                                <div class="flex flex-col items-center justify-center">
+                                    <div class="bg-gray-100 p-4 rounded-full mb-3">
+                                        <i data-lucide="inbox" class="w-8 h-8 text-gray-400"></i>
+                                    </div>
+                                    <p class="font-medium">No products found.</p>
+                                    <p class="text-xs mt-1">Try adjusting your filters.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination could go here -->
+            <div
+                class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-xs text-center text-gray-400 font-medium tracking-wide uppercase">
+                Showing {{ products|length }} Items
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

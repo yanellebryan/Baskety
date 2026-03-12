@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% block navbar %}{% endblock %}
+<script src="//unpkg.com/alpinejs" defer></script>
+<style>
+    /* Custom scrollbar for product grid and cart */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Smooth transition for hover effects */
+    .hover-lift {
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="h-screen flex flex-col bg-slate-50 overflow-hidden font-sans" x-data="posApp()">
+    <!-- Header (Modernized) -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm z-30 sticky top-0 border-b border-gray-100">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="{% url 'dashboard' %}"
+                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 transition mr-4">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </a>
+                    <div class="flex items-center space-x-2">
+                        <img src="{% static 'img/logo.png' %}" alt="Baskety" class="h-10 w-auto">
+                        <span class="text-xl font-bold tracking-tight text-gray-900 hidden sm:block">POS <span
+                                class="text-[#4CAF50]">System</span></span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <div class="text-right hidden sm:block">
+                        <div class="text-sm font-bold text-gray-900">{{ user.username }}</div>
+                        <div class="text-xs text-gray-500 font-medium tracking-wide"
+                            x-text="new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})"></div>
+                    </div>
+                    <!-- Cart Icon with Badge -->
+                    <div class="relative group cursor-pointer">
+                        <div class="p-2 rounded-full bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
+                            <i data-lucide="shopping-bag" class="w-6 h-6 text-indigo-600"></i>
+                        </div>
+                        <span
+                            class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 ring-2 ring-white text-[10px] font-bold text-white shadow-sm"
+                            x-text="cartTotalQty" x-show="cartTotalQty > 0" x-transition.scale></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex overflow-hidden relative">
+
+        <!-- LEFT PANEL: Products area -->
+        <div class="flex-1 flex flex-col min-w-0 bg-slate-50 relative z-0">
+            <!-- Search & Filter Bar (Floating) -->
+            <div class="px-6 py-4 z-20">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-4">
+                    <!-- Search Input -->
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search"
+                                class="w-5 h-5 text-gray-400 group-focus-within:text-[#4CAF50] transition-colors"></i>
+                        </div>
+                        <input type="text" x-model="searchQuery" @keydown.window.prevent.f2="$el.focus()"
+                            class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition-all sm:text-sm"
+                            placeholder="Search products (Press F2)">
+                    </div>
+
+                    <!-- Categories (Pills) -->
+                    <div class="flex space-x-2 overflow-x-auto scrollbar-hide pb-1">
+                        <button @click="selectedCategory = ''"
+                            :class="selectedCategory === '' ? 'bg-[#4CAF50] text-white shadow-md shadow-green-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                            class="px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200">All</button>
+                        {% for category in categories %}
+                        <button @click="selectedCategory = {{ category.id }}"
+                            :class="selectedCategory === {{ category.id }} ? 'bg-[#4CAF50] text-white shadow-md shadow-green-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                            class="px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200">
+                            {{ category.name }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="flex-1 overflow-y-auto px-6 pb-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <template x-for="product in filteredProducts" :key="product.id">
+                        <div @click="addToCart(product)"
+                            class="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col h-full border border-gray-100 relative overflow-hidden group hover:-translate-y-1">
+
+                            <!-- Out of Stock Overlay -->
+                            <div x-show="product.stock <= 0"
+                                class="absolute inset-0 bg-white/80 backdrop-blur-[2px] flex items-center justify-center z-20">
+                                <span
+                                    class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform -rotate-6 border-2 border-white">
+                                    OUT OF STOCK
+                                </span>
+                            </div>
+
+                            <!-- Image Area -->
+                            <div class="aspect-w-1 aspect-h-1 bg-gray-100 h-40 w-full overflow-hidden relative">
+                                <img :src="product.image_url || 'https://via.placeholder.com/300'"
+                                    class="h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                    alt="Product Image">
+                                <!-- Quick Add Overlay on Hover -->
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                                    x-show="product.stock > 0">
+                                    <div
+                                        class="bg-white text-[#4CAF50] rounded-full p-2 shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300 delay-75">
+                                        <i data-lucide="plus" class="w-6 h-6"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content Area -->
+                            <div class="p-4 flex flex-col flex-1">
+                                <h3 class="text-sm font-bold text-gray-800 line-clamp-2 leading-snug mb-1"
+                                    x-text="product.name"></h3>
+
+                                <div class="mt-auto pt-2 flex items-center justify-between">
+                                    <span class="text-lg font-extrabold text-[#4CAF50]"
+                                        x-text="'₱' + formatPrice(product.price)"></span>
+
+                                    <!-- Stock Badge -->
+                                    <span class="text-[10px] font-bold px-2 py-1 rounded-full border" :class="{
+                                              'bg-green-50 text-green-700 border-green-100': product.stock > 10,
+                                              'bg-yellow-50 text-yellow-700 border-yellow-100': product.stock <= 10 && product.stock > 0,
+                                              'bg-red-50 text-red-700 border-red-100': product.stock <= 0
+                                          }" x-text="product.stock + ' left'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="filteredProducts.length === 0"
+                    class="flex flex-col items-center justify-center h-64 text-gray-400">
+                    <div class="bg-white p-4 rounded-full shadow-sm mb-3">
+                        <i data-lucide="search-x" class="w-8 h-8 text-gray-300"></i>
+                    </div>
+                    <p class="text-sm font-medium">No products found for your search.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: Cart (Floating Sidebar) -->
+        <div class="w-96 bg-white shadow-2xl z-30 flex flex-col border-l border-gray-100 h-full relative">
+            <!-- Cart Header -->
+            <div
+                class="px-6 py-5 bg-white border-b border-gray-100 flex justify-between items-center shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] z-10">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Current Order</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">Transaction #<span
+                            x-text="Math.floor(Math.random() * 100000) + 1"></span></p>
+                </div>
+                <button @click="clearCart()"
+                    class="p-2 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+                    title="Clear Cart">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50">
+                <template x-for="(item, index) in cart" :key="item.id">
+                    <div
+                        class="flex items-center p-3 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow group">
+
+                        <!-- Item Details -->
+                        <div class="flex-1 min-w-0 pr-3">
+                            <h4 class="text-sm font-bold text-gray-800 truncate" x-text="item.name"></h4>
+                            <div class="text-xs text-gray-500 font-medium mt-0.5"
+                                x-text="'₱' + formatPrice(item.price)"></div>
+                        </div>
+
+                        <!-- Qty Controls -->
+                        <div class="flex items-center bg-gray-100 rounded-full px-1 py-1">
+                            <button @click="updateQty(index, -1)"
+                                class="w-6 h-6 flex items-center justify-center rounded-full bg-white text-gray-600 shadow-sm hover:text-red-500 transition-colors">
+                                <i data-lucide="minus" class="w-3 h-3"></i>
+                            </button>
+                            <span class="text-sm font-bold text-gray-800 w-8 text-center tabular-nums"
+                                x-text="item.qty"></span>
+                            <button @click="updateQty(index, 1)"
+                                class="w-6 h-6 flex items-center justify-center rounded-full bg-white text-gray-600 shadow-sm hover:text-green-600 transition-colors">
+                                <i data-lucide="plus" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+
+                        <!-- Total & Delete -->
+                        <div class="text-right pl-3 flex flex-col items-end">
+                            <span class="text-sm font-bold text-gray-900"
+                                x-text="'₱' + formatPrice(item.price * item.qty)"></span>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Empty Cart State -->
+                <div x-show="cart.length === 0"
+                    class="flex flex-col items-center justify-center h-full text-gray-400 opacity-60">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="shopping-cart" class="w-10 h-10 text-gray-300"></i>
+                    </div>
+                    <p class="font-medium">Cart is empty</p>
+                    <p class="text-xs mt-1">Select items to start sale</p>
+                </div>
+            </div>
+
+            <!-- Checkout Section -->
+            <div class="bg-white border-t border-gray-100 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] p-6 z-20">
+                <!-- Totals -->
+                <div class="space-y-2 mb-6">
+                    <div class="flex justify-between text-sm font-medium text-gray-500">
+                        <span>Subtotal</span>
+                        <span class="text-gray-800" x-text="'₱' + formatPrice(cartSubtotal)"></span>
+                    </div>
+                    <div class="flex justify-between text-sm font-medium text-gray-500">
+                        <span>Tax (10%)</span>
+                        <span class="text-gray-800" x-text="'₱' + formatPrice(cartTax)"></span>
+                    </div>
+                    <div class="border-t border-dashed border-gray-200 my-2 pt-2"></div>
+                    <div class="flex justify-between items-end">
+                        <span class="text-base font-bold text-gray-800">Total Amount</span>
+                        <span class="text-3xl font-extrabold text-[#4CAF50]"
+                            x-text="'₱' + formatPrice(cartTotal)"></span>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div x-show="cart.length > 0">
+                    <div class="bg-gray-100 p-1 rounded-xl grid grid-cols-2 gap-1 mb-4">
+                        <button @click="paymentMethod = 'cash'"
+                            :class="paymentMethod === 'cash' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                            class="py-2.5 rounded-lg text-sm font-bold transition-all">Cash</button>
+                        <button @click="paymentMethod = 'card'"
+                            :class="paymentMethod === 'card' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                            class="py-2.5 rounded-lg text-sm font-bold transition-all">Card</button>
+                    </div>
+
+                    <!-- Cash Input -->
+                    <div x-show="paymentMethod === 'cash'" class="mb-4 bg-gray-50 rounded-xl p-3 border border-gray-200"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform -translate-y-2"
+                        x-transition:enter-end="opacity-100 transform translate-y-0">
+
+                        <div class="relative">
+                            <span
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 font-bold">₱</span>
+                            <input type="number" x-model="amountReceived"
+                                class="block w-full pl-8 pr-3 py-2 border-gray-300 rounded-lg text-sm focus:ring-[#4CAF50] focus:border-[#4CAF50]"
+                                placeholder="Enter Amount Received">
+                        </div>
+
+                        <div class="flex justify-between items-center mt-2 text-sm">
+                            <span class="font-medium text-gray-500">Change:</span>
+                            <span class="font-bold text-lg" :class="change < 0 ? 'text-red-500' : 'text-green-600'"
+                                x-text="'₱' + formatPrice(Math.max(0, change))">₱0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <button @click="processCheckout()"
+                        :disabled="cart.length === 0 || (paymentMethod === 'cash' && change < 0)"
+                        class="w-full py-4 bg-[#4CAF50] text-white rounded-2xl font-bold text-lg shadow-lg shadow-green-200 hover:shadow-xl hover:bg-[#43a047] hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0 relative overflow-hidden group">
+                        <span class="relative z-10 flex items-center justify-center">
+                            PROCEED TO PAY
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function posApp() {
+        return {
+            products: JSON.parse('{{ products_json|escapejs }}'),
+            searchQuery: '',
+            selectedCategory: '',
+            cart: [],
+            paymentMethod: 'cash',
+            amountReceived: '',
+
+            get filteredProducts() {
+                return this.products.filter(p => {
+                    const matchesCategory = this.selectedCategory === '' || p.category_id === this.selectedCategory;
+                    const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                        p.sku.toLowerCase().includes(this.searchQuery.toLowerCase());
+                    return matchesCategory && matchesSearch;
+                });
+            },
+
+            addToCart(product) {
+                if (product.stock <= 0) return; // Prevent adding if OOS
+
+                const existingItem = this.cart.find(item => item.id === product.id);
+                if (existingItem) {
+                    // Check stock limit
+                    if (existingItem.qty >= product.stock) {
+                        alert('Not enough stock available!');
+                        return;
+                    }
+                    existingItem.qty++;
+                } else {
+                    this.cart.push({ ...product, qty: 1 });
+                }
+            },
+
+            removeFromCart(index) {
+                this.cart.splice(index, 1);
+            },
+
+            updateQty(index, change) {
+                const item = this.cart[index];
+                const newQty = item.qty + change;
+                if (newQty > 0) {
+                    // Check stock limit
+                    // Need to find original product to check stock
+                    const product = this.products.find(p => p.id === item.id);
+                    if (newQty > product.stock) {
+                        alert('Not enough stock available!');
+                        return;
+                    }
+                    item.qty = newQty;
+                } else {
+                    this.cart.splice(index, 1);
+                }
+            },
+
+            clearCart() {
+                if (confirm('Are you sure you want to clear the cart?')) {
+                    this.cart = [];
+                    this.amountReceived = '';
+                }
+            },
+
+            get cartTotalQty() {
+                return this.cart.reduce((sum, item) => sum + item.qty, 0);
+            },
+
+            get cartSubtotal() {
+                return this.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            },
+
+            get cartTax() {
+                return this.cartSubtotal * 0.10; // 10% tax hardcoded for now
+            },
+
+            get cartTotal() {
+                return this.cartSubtotal + this.cartTax;
+            },
+
+            get change() {
+                const received = parseFloat(this.amountReceived) || 0;
+                return received - this.cartTotal;
+            },
+
+            formatPrice(value) {
+                return parseFloat(value).toFixed(2);
+            },
+
+            processCheckout() {
+                if (this.cart.length === 0) return;
+
+                const checkoutData = {
+                    items: this.cart.map(item => ({ id: item.id, qty: item.qty, price: item.price })),
+                    total_amount: this.cartTotal,
+                    tax_amount: this.cartTax,
+                    payment: {
+                        method: this.paymentMethod,
+                        amount_paid: parseFloat(this.amountReceived) || this.cartTotal,
+                        change: Math.max(0, this.change)
+                    }
+                };
+
+                fetch('{% url "pos:checkout" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}' // Ensure CSRF is passed if needed, mostly handled by cookies but safe to add context if available, or rely on cookie
+                    },
+                    body: JSON.stringify(checkoutData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // alert('Transaction Completed! ID: ' + data.transaction_id); 
+                            // Modern notification logic could go here, for now alert is fine
+                            this.cart = [];
+                            this.amountReceived = '';
+                            window.location.reload();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error processing transaction');
+                        console.error(error);
+                    });
+            }
+        }
+    }
+</script>
+{% endblock %}

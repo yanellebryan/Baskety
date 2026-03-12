@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+{% load static %}
+<html lang="en">
+<!-- ... -->
+<!-- Empty State -->
+<div x-show="slides.length === 0" class="absolute inset-0 flex items-center justify-center text-white">
+    <img src="{% static 'img/logo.png' %}" alt="Baskety" class="h-32 w-auto opacity-80">
+</div>
+</div>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baskety Costumer Display</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <style>
+        body {
+            overflow: hidden;
+            background-color: black;
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1s;
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body x-data="slideshow()" x-init="startParams()">
+
+    <!-- Slides -->
+    <div class="relative w-screen h-screen">
+        <template x-for="(slide, index) in slides" :key="index">
+            <div x-show="activeSlide === index" x-transition:enter="transition ease-out duration-1000"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-1000" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="absolute inset-0 flex items-center justify-center">
+
+                <img :src="slide.image" class="w-full h-full object-cover opacity-80">
+                <div class="absolute bottom-20 left-20 bg-black bg-opacity-50 p-6 rounded-xl">
+                    <h1 class="text-white text-6xl font-bold" x-text="slide.title"></h1>
+                </div>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <div x-show="slides.length === 0" class="absolute inset-0 flex items-center justify-center text-white">
+            <img src="{% static 'img/logo.png' %}" alt="Baskety" class="h-32 w-auto opacity-80">
+        </div>
+    </div>
+
+    <!-- Clock / Info Overlay -->
+    <div class="absolute top-10 right-10 text-white text-right z-50">
+        <h2 class="text-5xl font-bold" x-text="time"></h2>
+        <p class="text-2xl mt-2" x-text="date"></p>
+    </div>
+
+    <script>
+        function slideshow() {
+            return {
+                slides: [
+                    {% for slide in slides %}
+            {
+                title: "{{ slide.title|escapejs }}",
+                    image: "{{ slide.image.url }}"
+            },
+            {% endfor %}
+                ],
+            activeSlide: 0,
+                time: '',
+                    date: '',
+
+                        startParams() {
+                this.updateTime();
+                setInterval(() => this.updateTime(), 1000);
+
+                if (this.slides.length > 1) {
+                    setInterval(() => {
+                        this.activeSlide = (this.activeSlide + 1) % this.slides.length;
+                    }, 5000); // 5 seconds per slide
+                }
+            },
+
+            updateTime() {
+                const now = new Date();
+                this.time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                this.date = now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            }
+        }
+        }
+    </script>
+</body>
+
+</html>

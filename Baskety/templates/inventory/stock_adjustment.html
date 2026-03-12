@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h1 class="text-xl font-bold text-gray-800">Adjust Stock</h1>
+        </div>
+        <form method="post" class="p-6">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="mb-4 text-red-500 text-sm">Please correct the errors below.</div>
+            {% endif %}
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Product</label>
+                    <select name="product"
+                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2 border">
+                        {% for x, y in form.fields.product.choices %}
+                        <option value="{{ x }}" {% if form.product.value == x %}selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Movement Type</label>
+                    <select name="movement_type"
+                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2 border">
+                        {% for x, y in form.fields.movement_type.choices %}
+                        <option value="{{ x }}" {% if form.movement_type.value == x %}selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                    <input type="number" name="quantity"
+                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2 border"
+                        required placeholder="Use positive for Restock/Return">
+                    <p class="text-xs text-gray-500 mt-1">For Sales/Adjustment, negative handling is automatic or manual
+                        depending on logic.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Reason</label>
+                    <input type="text" name="reason"
+                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2 border">
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <a href="{% url 'inventory:dashboard' %}"
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancel</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow">Save
+                    Adjustment</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
