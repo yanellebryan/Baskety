@@ -1,10 +1,10 @@
 # Baskety
 
-Welcome to **Baskety**, a comprehensive school inventory and point-of-sale (POS) management system! This Django-based application is designed to streamline product tracking, manage stock, and facilitate sales transactions efficiently.
+Welcome to **Baskety**, a comprehensive mini mart grocery store inventory configuration and point-of-sale (POS) management system! This Django-based application is designed to streamline product tracking, manage grocery stock, and facilitate fast sales transactions efficiently.
 
 ## Project Overview
 
-Baskety provides a centralized solution for managing inventory and tracking sales. It features a user-friendly dashboard for quick insights, a robust product management module, and a complete POS system tailored for school operations.
+Baskety provides a centralized solution for managing a mini mart's daily operations. It features a user-friendly dashboard for quick insights, a robust product management module, and a complete POS system tailored for fast-paced retail environments.
 
 ### Key Features
 
