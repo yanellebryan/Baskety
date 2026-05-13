@@ -1,114 +1,108 @@
-<div align="center">
-  <h1>🛒 Baskety</h1>
-  <p><em>A modern, comprehensive Point-of-Sale (POS) and Inventory Management System built with Django.</em></p>
-  
-  [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
-  [![Django](https://img.shields.io/badge/Django-Web_Framework-092E20.svg?logo=django)](https://www.djangoproject.com/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-</div>
+# Baskety-POS
+
+Welcome to **Baskety**, a comprehensive mini mart grocery store inventory configuration and point-of-sale (POS) management system! This Django-based application is designed to streamline product tracking, manage grocery stock, and facilitate fast sales transactions efficiently.
+
+## Project Overview
+
+Baskety provides a centralized solution for managing a mini mart's daily operations. It features a user-friendly dashboard for quick insights, a robust product management module, and a complete POS system tailored for fast-paced retail environments.
+
+### Key Features
+
+*   **Dashboard Analytics:** Get a bird's-eye view of your inventory and sales performance with interactive charts and summaries.
+*   **Product Management:** Easily add, edit, view, and delete products in the system.
+*   **Inventory Control:** Track stock levels, adjust quantities, and monitor low-stock items to ensure you never run out of essential supplies.
+*   **Point of Sale (POS):** A dedicated interface for processing sales quickly and accurately, including a modern customer-facing display.
+*   **Reporting:** Generate comprehensive reports on sales, inventory status, and other key metrics to inform decision-making.
+*   **User Accounts & Roles:** Secure authentication system with different access levels to protect sensitive data.
 
 ---
 
-Welcome to **Baskety**, a powerful and intuitive Point-of-Sale (POS) and inventory management system designed specifically for mini-marts, grocery stores, and small retail shops. Baskety streamlines your daily operations, from tracking stock levels to processing lightning-fast checkout transactions.
+## Getting Started (For Collaborators)
 
-## ✨ Key Features
-
-- 📊 **Interactive Dashboard**: Get a bird's-eye view of your business with real-time analytics, sales summaries, and inventory alerts.
-- 📦 **Smart Inventory Control**: Monitor stock levels, track low-stock items automatically, and never run out of your best-sellers.
-- 🏷️ **Comprehensive Product Management**: Easily add, categorize, edit, and organize your products and suppliers.
-- 💻 **Modern Point of Sale (POS)**: A clean, user-friendly interface tailored for fast-paced retail environments. Designed for rapid scanning and seamless checkout.
-- 📈 **Detailed Reporting**: Generate insightful reports on daily sales, revenue trends, and inventory status to make data-driven decisions.
-- 🔐 **Role-Based Access Control**: Secure authentication with specific roles (Admin, Manager, Cashier) to protect sensitive business data.
-
-## 🛠️ Technology Stack
-
-- **Backend:** Python, Django
-- **Database:** SQLite (Development) / PostgreSQL (Production Ready)
-- **Frontend:** HTML5, CSS3, JavaScript, TailwindCSS
-
----
-
-## 🚀 Getting Started
-
-Follow these instructions to set up Baskety on your local machine for development and testing.
+This section provides instructions for group members on how to set up the project locally and start contributing.
 
 ### Prerequisites
 
-Ensure you have the following installed on your system:
-- [Python 3.8+](https://www.python.org/downloads/)
-- [Git](https://git-scm.com/downloads)
+Before you begin, ensure you have the following installed on your machine:
+*   [Python 3.x](https://www.python.org/downloads/)
+*   [Git](https://git-scm.com/downloads)
+*   [pip](https://pip.pypa.io/en/stable/installation/) (Python package installer)
 
-### Installation Guide
+### 1. Clone the Repository
+First, clone the Baskety repository to your local machine:
+```bash
+git clone https://github.com/yanellebryan/Baskety.git
+cd Baskety
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yanellebryan/Baskety.git
-   cd Baskety
-   ```
+### 2. Set Up a Virtual Environment
+It is highly recommended to use a virtual environment to manage project dependencies and avoid conflicts with other Python projects.
 
-2. **Set up a virtual environment:**
-   - **Windows:**
-     ```bash
-     python -m venv venv
-     venv\Scripts\activate
-     ```
-   - **macOS/Linux:**
-     ```bash
-     python3 -m venv venv
-     source venv/bin/activate
-     ```
+**Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r Baskety/requirements.txt
-   ```
-   *(Note: Navigate to the inner `Baskety` directory if that is where `requirements.txt` is located.)*
+**macOS/Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-4. **Apply database migrations:**
-   ```bash
-   cd Baskety
-   python manage.py migrate
-   ```
+### 3. Install Dependencies
+Once the virtual environment is activated, install the required packages using `pip`:
+```bash
+pip install -r requirements.txt
+```
+*(Note: If `requirements.txt` is missing, the core dependency is `django`. Other dependencies may be added as the project evolves.)*
 
-5. **Create a superuser account:**
-   ```bash
-   python manage.py createsuperuser
-   ```
-   *(Follow the prompts to set up your admin credentials.)*
+### 4. Apply Database Migrations
+Initialize your local database by running the Django migrations:
+```bash
+python manage.py migrate
+```
 
-6. **Start the development server:**
-   ```bash
-   python manage.py runserver
-   ```
-   *Navigate to `http://127.0.0.1:8000/` in your browser to see Baskety in action!*
+### 5. Create a Superuser (Optional but Recommended)
+To access the Django admin panel, you'll need a superuser account:
+```bash
+python manage.py createsuperuser
+```
+Follow the prompts to set up your admin credentials.
 
----
-
-## 🤝 Contributing
-
-We welcome contributions! To keep our codebase clean and organized, please follow this collaborative workflow:
-
-1. **Pull the latest changes** from the `main` branch before starting:
-   ```bash
-   git checkout main
-   git pull origin main
-   ```
-2. **Create a feature branch:**
-   ```bash
-   git checkout -b feature/your-awesome-feature
-   ```
-3. **Commit your changes** with clear and descriptive messages:
-   ```bash
-   git commit -m "Add new daily sales reporting chart"
-   ```
-4. **Push your branch:**
-   ```bash
-   git push origin feature/your-awesome-feature
-   ```
-5. **Open a Pull Request (PR)** on GitHub and request a review from the team.
+### 6. Run the Development Server
+Start the local server to see the project in action:
+```bash
+python manage.py runserver
+```
+Open your web browser and navigate to `http://127.0.0.1:8000/`.
 
 ---
 
-<div align="center">
-  <p>Built with ❤️ by the Baskety Team. Let's build something great together!</p>
-</div>
+## Workflow for Collaboration
+
+To keep our codebase clean and organized, please follow this workflow when making contributions:
+
+1.  **Always pull the latest changes** from the `main` branch before starting new work:
+    ```bash
+    git checkout main
+    git pull origin main
+    ```
+2.  **Create a new branch** for your feature or bug fix. Give it a descriptive name:
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+    *(e.g., `git checkout -b feature/add-new-reports`)*
+3.  **Make your changes and test them locally.**
+4.  **Commit your changes** with clear and concise messages:
+    ```bash
+    git add .
+    git commit -m "Add new reporting feature for daily sales"
+    ```
+5.  **Push your branch** to the remote repository on GitHub:
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+6.  **Open a Pull Request (PR)** on GitHub. Navigate to the repository, select your branch, and click "Compare & pull request". Provide a clear description of your changes and request a review from your groupmates.
+
+Happy coding! Let's build something great together.
